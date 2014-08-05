@@ -5,6 +5,9 @@
 </head>
 <body>
   Hello world!!
+  <div>
+    Compared to:<br/>12.971784, 77.664276
+  </div>
   <div id="location"></div>
   <script type="text/javascript">
     function dist(a, b) {
@@ -24,7 +27,6 @@
       return deg * (Math.PI/180)
     }
 
-// 12.972009, 77.663083
     var bakery = {
       latitude: 12.971784,
       longitude: 77.664276
@@ -36,7 +38,7 @@
               loc.innerHTML = "Near";
               clearInterval(poller);
             } else {
-              loc.innerHTML += cur_dist + "<br/>";
+              loc.innerHTML += position.coords.latitude + "," + position.coords.longitude + " " + cur_dist + "<br/>";
             }
           });
         }, 5000);
