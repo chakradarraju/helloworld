@@ -5,5 +5,12 @@
 </head>
 <body>
   Hello world!!
+  <div id="location"></div>
+  <script type="text/javascript">
+    var loc = document.getElementById('location');
+    navigator.geolocation.getCurrentPosition(function(position) {
+      loc.innerHTML = position.coords.latitude + "," + position.coords.longitude;
+    });
+  </script>
 </body>
 </html>
