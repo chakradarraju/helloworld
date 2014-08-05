@@ -7,10 +7,28 @@
   Hello world!!
   <div id="location"></div>
   <script type="text/javascript">
+    function dist(a, b) {
+      var dx = parseFloat(a.latitude) - parseFloat(b.latitude),
+          dy = parseFloat(a.longitude) - parseFloat(b.longitude);
+      return Math.sqrt(dx*dx+dy*dy);
+    }
+// 12.972009, 77.663083
+    var bakery = {
+      latitude: 12.971784,
+      longitude: 77.664276
+    },
+        poller = setInterval(function() {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var cur_dist = dist(position.coords, bakery);
+            if (cur_dist < 0.00012230095093) {
+              loc.innerHTML = "Near";
+              clearInterval(poller);
+            } else {
+              loc.innerHTML += cur_dist + "<br/>";
+            }
+          });
+        }, 5000);
     var loc = document.getElementById('location');
-    navigator.geolocation.getCurrentPosition(function(position) {
-      loc.innerHTML = position.coords.latitude + "," + position.coords.longitude;
-    });
   </script>
 </body>
 </html>
