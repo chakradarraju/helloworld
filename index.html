@@ -6,10 +6,13 @@
 <body>
   Hello world!!
   <div>
-    Compared to:<br/>12.971784, 77.664276
+    Compared to:<br/>
+    lat:<input id="lat" /><br/>
+    lon:<input id="lon" /><br/>
   </div>
   <div id="location"></div>
   <script type="text/javascript">
+    var loc = document.getElementById('location');
     function dist(a, b) {
       var R = 6371; // Radius of the earth in km
       var dLat = deg2rad(a.latitude-b.latitude);  // deg2rad below
@@ -27,22 +30,28 @@
       return deg * (Math.PI/180)
     }
 
-    var bakery = {
-      latitude: 12.971784,
-      longitude: 77.664276
-    },
-        poller = setInterval(function() {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var cur_dist = dist(position.coords, bakery);
-            if (cur_dist < 0.01) {
-              loc.innerHTML = "Near";
-              clearInterval(poller);
-            } else {
-              loc.innerHTML += position.coords.latitude + "," + position.coords.longitude + " " + cur_dist + "<br/>";
-            }
-          });
-        }, 5000);
-    var loc = document.getElementById('location');
+    function byId(id) {
+      return document.getElementById(id);
+    }
+
+    function getToCompare() {
+      return {
+        latitude: byId('lat'),
+        longitude: byId('lon')
+      };
+    }
+
+    poller = setInterval(function() {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var cur_dist = dist(position.coords, getToCompare());
+        if (cur_dist < 0.01) {
+          loc.innerHTML = "Near";
+          clearInterval(poller);
+        } else {
+          loc.innerHTML += position.coords.latitude + "," + position.coords.longitude + " " + cur_dist + "<br/>";
+        }
+      });
+    }, 5000);
   </script>
 </body>
 </html>
