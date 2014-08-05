@@ -43,7 +43,7 @@
 
     poller = setInterval(function() {
       navigator.geolocation.getCurrentPosition(function(position) {
-        var cur_dist = dist(getToCompare2(), getToCompare());
+        var cur_dist = dist(position.coords, getToCompare());
         if (cur_dist < 0.2) {
           loc.innerHTML = "Near";
           clearInterval(poller);
