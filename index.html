@@ -8,10 +8,22 @@
   <div id="location"></div>
   <script type="text/javascript">
     function dist(a, b) {
-      var dx = parseFloat(a.latitude) - parseFloat(b.latitude),
-          dy = parseFloat(a.longitude) - parseFloat(b.longitude);
-      return Math.sqrt(dx*dx+dy*dy);
+      var R = 6371; // Radius of the earth in km
+      var dLat = deg2rad(a.latitude-b.latitude);  // deg2rad below
+      var dLon = deg2rad(a.longitude-b.longitude); 
+      var a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(b.latitude)) * Math.cos(deg2rad(a.latitude)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2); 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      var d = R * c; // Distance in km
+      return d;
     }
+
+    function deg2rad(deg) {
+      return deg * (Math.PI/180)
+    }
+
 // 12.972009, 77.663083
     var bakery = {
       latitude: 12.971784,
@@ -20,7 +32,7 @@
         poller = setInterval(function() {
           navigator.geolocation.getCurrentPosition(function(position) {
             var cur_dist = dist(position.coords, bakery);
-            if (cur_dist < 0.00012230095093) {
+            if (cur_dist < 0.01) {
               loc.innerHTML = "Near";
               clearInterval(poller);
             } else {
