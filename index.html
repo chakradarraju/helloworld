@@ -7,8 +7,8 @@
   Hello world!!
   <div>
     Compared to:<br/>
-    lat:<input id="lat" value="12.971784" /><br/>
-    lon:<input id="lon" value="77.664276" /><br/>
+    lat:<input id="lat" value="12.993594" /><br/>
+    lon:<input id="lon" value="77.663911" /><br/>
   </div>
   <div id="location"></div>
   <script type="text/javascript">
@@ -43,8 +43,8 @@
 
     poller = setInterval(function() {
       navigator.geolocation.getCurrentPosition(function(position) {
-        var cur_dist = dist(position.coords, getToCompare());
-        if (cur_dist < 0.01) {
+        var cur_dist = dist(getToCompare2(), getToCompare());
+        if (cur_dist < 0.2) {
           loc.innerHTML = "Near";
           clearInterval(poller);
         } else {
