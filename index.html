@@ -54,11 +54,7 @@
     function onChange(position) {
       cur_lat.value = position.coords.latitude;
       cur_lon.value = position.coords.longitude;
-      var cur_dist = dist(position.coords, getToCompare());
-      if (cur_dist < 0.2)
-        message.innerHTML = "You're there";
-      else
-        message.innerHTML = cur_dist + " km to go...";
+      message.innerHTML = dist(position.coords, getToCompare()) + " km to go...";
     }
 
     function onError(err) {
