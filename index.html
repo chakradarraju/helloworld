@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hello title</title>
+<title>Distance watcher</title>
 </head>
 <body>
-  Hello world!!
   <div>
-    Compared to:<br/>
-    lat:<input id="lat" value="12.993594" /><br/>
-    lon:<input id="lon" value="77.663911" /><br/>
+    Destination:<br/>
+    lat:<input id="dest_lat" value="12.993594" /><br/>
+    lon:<input id="dest_lon" value="77.663911" /><br/>
+    Current location:<br/>
+    lat:<input id="cur_lat" disabled /><br/>
+    lon:<input id="cur_lon" disabled /><br/>
   </div>
-  <div id="location"></div>
+  <div id="message"></div>
   <script type="text/javascript">
-    var loc = document.getElementById('location');
+    var message = byId('message'),
+        dest_lat = byId('dest_lat'),
+        dest_lon = byId('dest_lon'),
+        cur_lat = byId('cur_lat'),
+        cur_lon = byId('cur_lon');
+
     function dist(a, b) {
       var R = 6371; // Radius of the earth in km
       var dLat = deg2rad(a.latitude-b.latitude);  // deg2rad below
@@ -36,22 +43,20 @@
 
     function getToCompare() {
       return {
-        latitude: byId('lat').value,
-        longitude: byId('lon').value
+        latitude: dest_lat.value,
+        longitude: dest_lon.value
       };
     }
 
-    poller = setInterval(function() {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var cur_dist = dist(position.coords, getToCompare());
-        if (cur_dist < 0.2) {
-          loc.innerHTML = "Near";
-          clearInterval(poller);
-        } else {
-          loc.innerHTML += position.coords.latitude + "," + position.coords.longitude + " " + cur_dist + "<br/>";
-        }
-      });
-    }, 5000);
+    navigator.geolocation.watchPosition(function(position) {
+      cur_lat.value = position.coords.latitude;
+      cur_lon.value = position.coords.longitude;
+      var cur_dist = dist(position.coords, getToCompare());
+      if (cur_dist < 0.2)
+        message.innerHTML = "You're there";
+      else
+        message.innerHTML = cur_dist + " km to go...";
+    });
   </script>
 </body>
 </html>
