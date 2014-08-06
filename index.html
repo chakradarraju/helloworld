@@ -22,6 +22,7 @@
         dest_lon = byId('dest_lon'),
         cur_lat = byId('cur_lat'),
         cur_lon = byId('cur_lon');
+    var audio = new Audio('alarm.mp3');
 
     function dist(a, b) {
       var R = 6371; // Radius of the earth in km
@@ -54,7 +55,9 @@
     function onChange(position) {
       cur_lat.value = position.coords.latitude;
       cur_lon.value = position.coords.longitude;
-      message.innerHTML = dist(position.coords, getToCompare()) + " km to go...";
+      var cur_dist = dist(position.coords, getToCompare());
+      if (cur_dist < 0.05) audio.play();
+      message.innerHTML = cur_dist + " km to go...";
     }
 
     function onError(err) {
