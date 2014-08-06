@@ -11,10 +11,13 @@
     Current location:<br/>
     lat:<input id="cur_lat" disabled /><br/>
     lon:<input id="cur_lon" disabled /><br/>
+    High Accuracy: <input type="checkbox" id="chk_high_acc" onclick="reWatchPosition()" /><br/>
   </div>
-  <div id="message"></div>
+  Error: <div id="error"></div><br/>
+  Message: <div id="message"></div><br/>
   <script type="text/javascript">
     var message = byId('message'),
+        error = byId('error'),
         dest_lat = byId('dest_lat'),
         dest_lon = byId('dest_lon'),
         cur_lat = byId('cur_lat'),
@@ -48,7 +51,7 @@
       };
     }
 
-    navigator.geolocation.watchPosition(function(position) {
+    function onChange(position) {
       cur_lat.value = position.coords.latitude;
       cur_lon.value = position.coords.longitude;
       var cur_dist = dist(position.coords, getToCompare());
@@ -56,7 +59,21 @@
         message.innerHTML = "You're there";
       else
         message.innerHTML = cur_dist + " km to go...";
-    });
+    }
+
+    function onError(err) {
+      error.innerHTML = 'ERROR('+err.code+'): '+err.message;
+    }
+
+    var options = { enableHighAccuracy: false, timeout: 5000, maximumAge: 5000 };
+
+    var watcher = navigator.geolocation.watchPosition(onChange, onError, options);
+
+    function reWatchPosition() {
+      navigator.geolocation.clearWatch(watcher);
+      options.enableHighAccuracy = byId('chk_high_acc').checked;
+      watcher = navigator.geolocation.watchPosition(onChange, onError, options);
+    }
   </script>
 </body>
 </html>
