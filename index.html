@@ -65,7 +65,7 @@
       error.innerHTML = 'ERROR('+err.code+'): '+err.message;
     }
 
-    var options = { enableHighAccuracy: false, timeout: 5000, maximumAge: 5000 };
+    var options = { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 };
 
     var watcher = navigator.geolocation.watchPosition(onChange, onError, options);
 
